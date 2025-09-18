@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Lissa 🎂💖</title>
+<style>
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  overflow:hidden;
+  background:#000;
+}
+.slideshow{
+  position:relative;
+  width:100vw;
+  height:100vh;
+}
+.slideshow img{
+  position:absolute;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:0;
+  transition:opacity 2s ease-in-out, transform 1s ease-in-out;
+  transform:scale(1);
+}
+.slideshow img.active{
+  opacity:1;
+  transform:scale(1.05);
+}
+
+/* Romantic Text with typing + gradient */
+.wish{
+  position:absolute;
+  bottom:50px;
+  width:100%;
+  text-align:center;
+  font-size:28px;
+  font-weight:bold;
+}
+.gradient{
+  background: linear-gradient(90deg, #ff5f6d, #ffc371, #ff5f6d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: sparkle 2s infinite alternate;
+}
+@keyframes sparkle{
+  from{background-position:0%;}
+  to{background-position:100%;}
+}
+
+/* Cake + Candle + Spark */
+.cake{
+  position:absolute;
+  top:20%;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:90px;
+  animation:bounce 2s infinite;
+  cursor:pointer;
+}
+@keyframes bounce{
+  0%,100%{transform:translateX(-50%) translateY(0);}
+  50%{transform:translateX(-50%) translateY(-20px);}
+}
+.candle{
+  position:absolute;
+  top:12%;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:50px;
+  color:gold;
+  animation:flicker 0.2s infinite alternate;
+}
+@keyframes flicker{from{opacity:0.7;}to{opacity:1;}}
+.smoke{
+  position:absolute;
+  top:10%;
+  left:50%;
+  width:20px;
+  height:50px;
+  background:rgba(200,200,200,0.3);
+  border-radius:50%;
+  animation: smokeUp 2s infinite;
+  transform:translateX(-50%);
+}
+@keyframes smokeUp{
+  0%{transform:translate(-50%,0) scale(1);opacity:0.5;}
+  50%{transform:translate(-50%,-30px) scale(1.2);opacity:0.3;}
+  100%{transform:translate(-50%,-60px) scale(1.5);opacity:0;}
+}
+
+/* Floating Hearts */
+.heart{
+  position:absolute;
+  color:pink;
+  font-size:20px;
+  animation: float 6s linear infinite;
+}
+@keyframes float{
+  0%{transform:translateY(100vh) scale(0.5);opacity:1;}
+  100%{transform:translateY(-10vh) scale(1);opacity:0;}
+}
+
+/* Fireworks */
+.firework{
+  position:absolute;
+  border-radius:50%;
+  background:radial-gradient(circle,white,orange,red);
+  width:10px;
+  height:10px;
+  pointer-events:none;
+  opacity:0;
+  animation: explode 1s ease-out forwards;
+}
+@keyframes explode{
+  0%{transform:scale(1);opacity:1;}
+  100%{transform:scale(8);opacity:0;}
+}
+
+/* Confetti */
+.confetti{
+  position:absolute;
+  width:10px;
+  height:10px;
+  opacity:0.8;
+  animation: confetti-fall 3s linear forwards;
+}
+@keyframes confetti-fall{
+  0%{transform:translateY(0) rotate(0deg);}
+  100%{transform:translateY(100vh) rotate(360deg);}
+}
+</style>
+</head>
+<body>
+
+<div class="slideshow">
+  <img src="photo1.jpg" class="active">
+  <img src="photo2.jpg">
+  <img src="photo3.jpg">
+  <img src="photo4.jpg">
+  <img src="photo5.jpg">
+
+  <div class="cake" id="cake">🎂</div>
+  <div class="candle" id="candle">🕯️</div>
+  <div class="smoke" id="smoke"></div>
+
+  <div class="wish" id="wishText"><span id="typing" class="gradient"></span></div>
+</div>
+
+<audio id="bg-music" autoplay loop>
+  <source src="song.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+// Slideshow + Romantic Text Typing
+let slides=document.querySelectorAll(".slideshow img");
+let current=0;
+let texts=[
+"শুভ জন্মদিন লিসা 💖 তুমি আমার সবকিছু…",
+"রাগ কোরো না প্রিয়তমা, আমি ভুল করলেও আমার হৃদয় কখনও তোমায় ছাড়া কিছুর জন্য ধড়ফড় করেনি…",
+"তুমি আমার চাঁদের আলো, আমার হাসির কারণ, আমার বুকের গভীর ভালোবাসা…",
+"আজকের এই দিনে শুধু চাই, সারাজীবন তোমার হাত ধরে চলতে…",
+"লিসা, তুমি আমার শ্বাস, তুমি ছাড়া আমার পৃথিবী থমকে যাবে…",
+"যদি রাগ করে দূরে সরে যাও, আমি জানি আমার আকাশ ফাঁকা হয়ে যাবে…",
+"শুভ জন্মদিন ভালোবাসা 💖 তোমার হাসির জন্য আমি সব ভুলে যাই…"
+];
+let textIndex=0;
+let typing=document.getElementById("typing");
+
+function typeText(text,index=0){
+  if(index<text.length){
+    typing.innerHTML=text.slice(0,index+1);
+    setTimeout(()=>typeText(text,index+1),50);
+  }
+}
+
+function showSlides(){
+  slides.forEach(s=>s.classList.remove("active"));
+  slides[current].classList.add("active");
+  
+  // Typing effect
+  typeText(texts[textIndex]);
+
+  // Confetti + Fireworks
+  for(let i=0;i<30;i++){
+    let conf=document.createElement("div");
+    conf.classList.add("confetti");
+    conf.style.left=Math.random()*100+"vw";
+    conf.style.backgroundColor=`hsl(${Math.random()*360},100%,50%)`;
+    document.body.appendChild(conf);
+    setTimeout(()=>conf.remove(),3000);
+  }
+  createFirework(window.innerWidth/2,window.innerHeight/2);
+
+  current=(current+1)%slides.length;
+  textIndex=(textIndex+1)%texts.length;
+  setTimeout(showSlides,5000);
+}
+showSlides();
+
+// Floating Hearts
+function createHeart(){
+  const heart=document.createElement("div");
+  heart.classList.add("heart");
+  heart.innerHTML="❤";
+  heart.style.left=Math.random()*100+"vw";
+  heart.style.fontSize=Math.random()*20+15+"px";
+  document.body.appendChild(heart);
+  setTimeout(()=>heart.remove(),6000);
+}
+setInterval(createHeart,400);
+
+// Candle tap to blow + smoke vanish + fireworks
+let candle=document.getElementById("candle");
+let blown=false;
+candle.addEventListener("click",()=>{
+  if(!blown){
+    candle.style.opacity="0";
+    document.getElementById("smoke").style.display="none";
+    blown=true;
+    for(let i=0;i<50;i++){
+      createFirework(window.innerWidth/2,window.innerHeight*0.12);
+    }
+  }
+});
+
+// Fireworks
+function createFirework(x,y){
+  for(let i=0;i<25;i++){
+    const fw=document.createElement("div");
+    fw.classList.add("firework");
+    fw.style.left=(x+(Math.random()-0.5)*300)+"px";
+    fw.style.top=(y+(Math.random()-0.5)*300)+"px";
+    document.body.appendChild(fw);
+    setTimeout(()=>fw.remove(),1000);
+  }
+}
+</script>
+</body>
+</html>
